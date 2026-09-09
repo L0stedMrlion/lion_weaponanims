@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fwClipSetManager>
+  <clipSets>
+    <Item type="fwClipSet" key="lion_weaponanim_pistol">
+      <fallbackId>weapons@pistol@</fallbackId>
+      <clipDictionaryName>lion_weaponanim_pistol</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags>
+        <Item>UseAdditives</Item>
+        <Item>HasFireAnim</Item>
+        <Item>HasIdleAnim</Item>
+      </moveNetworkFlags>
+    </Item>
+
+    <Item type="fwClipSet" key="lion_weaponanim_rifle">
+      <fallbackId>weapons@rifle@lo@carbine</fallbackId>
+      <clipDictionaryName>lion_weaponanim_rifle</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags>
+        <Item>UseAdditives</Item>
+        <Item>HasIdleAnim</Item>
+        <Item>HasWeaponSprint</Item>
+      </moveNetworkFlags>
+    </Item>
+
+    <Item type="fwClipSet" key="lion_weaponanim_cover_1h">
+      <fallbackId>cover@move@ai@base@1h</fallbackId>
+      <clipDictionaryName>lion_weaponanim_cover_1h</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags />
+    </Item>
+
+    <Item type="fwClipSet" key="lion_weaponanim_stealth_1h">
+      <fallbackId>weapons@pistol@</fallbackId>
+      <clipDictionaryName>lion_weaponanim_stealth_1h</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags />
+    </Item>
+
+    <Item type="fwClipSet" key="lion_weaponanim_stealth_2h">
+      <fallbackId>weapons@rifle@</fallbackId>
+      <clipDictionaryName>lion_weaponanim_stealth_2h</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags />
+    </Item>
+
+    <Item type="fwClipSet" key="lion_weaponanim_stealth_unarmed">
+      <fallbackId>move_ped_strafing_stealth</fallbackId>
+      <clipDictionaryName>lion_weaponanim_stealth_unarmed</clipDictionaryName>
+      <clipItems />
+      <moveNetworkFlags />
+    </Item>
+  </clipSets>
+</fwClipSetManager>
