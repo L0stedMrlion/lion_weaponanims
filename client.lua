@@ -77,7 +77,7 @@ local function loadClipsets()
 
         if ready then
             clipsetsReady = true
-            print('[WeaponAnim] Custom clipsets loaded successfully.')
+            print('^3[lion_weaponanims] ^7Custom clipsets loaded successfully!')
             return
         end
 
@@ -92,7 +92,7 @@ local function loadClipsets()
         end
     end
 
-    print(('[WeaponAnim] ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(missing, ', ')))
+    print(('^3[lion_weaponanims] ^7ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(missing, ', ')))
 end
 
 local function clearPed(ped)
