@@ -1,4 +1,5 @@
 local function CheckVersion()
+    Wait(2000)
     PerformHttpRequest('https://raw.githubusercontent.com/L0stedMrlion/lion_scripts_versions/main/versions.json',
         function(err, responseData, headers)
             local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
