@@ -11,8 +11,11 @@ files {
 
 data_file 'CLIP_SETS_FILE' 'data/clip_sets.xml'
 
+shared_scripts {
+    'config.lua'
+}
+
 client_scripts {
-    'config.lua',
     'client.lua'
 }
 
