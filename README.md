@@ -17,3 +17,10 @@ And there is a melee animation.
 
 **GIFS could not be uploaded because of size**. Can be only found on Release Post on FiveM Forum.
 
+## ✨ Credits & Support
+  - Original animations: [Ko's Tactical Weapon Reanimations](https://www.lcpdfr.com/downloads/gta5mods/character/54273-kos-tactical-weapon-reanimations/)
+All animation credits belong to the original animation creator.
+
+## 🦁 Support
+
+- If you need any support just contact me on my Discord. I'm named there **lostedmrlion** or you click on [this](https://discord.com/users/710549603216261141).
