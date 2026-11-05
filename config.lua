@@ -14,6 +14,26 @@ Config = {
     -- Enables/disables version check for new updates
     VersionCheck = true,
 
+    -- auto, esx, qbcore, qbox, ox, standalone or custom
+    -- Auto-detection prefers qbx_core over its qb-core compatibility bridge.
+    Framework = 'auto',
+
+    -- QB/Qbox: require the player to be on duty (default keeps original behavior).
+    RequireDuty = false,
+
+    -- Qbox: allow any owned job as well as the primary job (when RequireDuty=false).
+    QboxAllowSecondaryJobs = false,
+
+    -- Standalone mode is available to ALL players with no jobs or permissions.
+    -- Setting Framework = 'standalone' forces this behavior even when a framework runs.
+
+    -- For custom frameworks set Framework = 'custom' and provide a server-side
+    -- function returning the player's job name, or nil if not logged in.
+    -- CustomJobResolver = function(source) return nil end,
+
+    -- Backup check for late character loads and missed job events (milliseconds).
+    ServerSyncInterval = 15000,
+
     -- Enables or disables the custom weapon movement animations for specific jobs
     -- Add or remove job names here depending on which jobs will use the animations
     AllowedJobs = {
