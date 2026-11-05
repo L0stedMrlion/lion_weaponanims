@@ -1,6 +1,3 @@
-local ESX = exports.es_extended:getSharedObject()
-
-local ALLOWED_JOBS = Config.AllowedJobs
 local STATE_KEY = 'lionWeaponAnim'
 
 local CLIPSETS = {
@@ -92,7 +89,8 @@ local function loadClipsets()
         end
     end
 
-    print(('^3[lion_weaponanims] ^7ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(missing, ', ')))
+    print(('^3[lion_weaponanims] ^7ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(
+        missing, ', ')))
 end
 
 local function clearPed(ped)
@@ -215,50 +213,35 @@ local function applyPed(ped, allowed)
     end
 end
 
-local function setAllowed(job)
-    local allowed = job and ALLOWED_JOBS[job.name] == true or false
-
-    if localAllowed == allowed then
-        if LocalPlayer.state[STATE_KEY] ~= allowed then
-            LocalPlayer.state:set(STATE_KEY, allowed, true)
-        end
-        return
-    end
+local function updateLocalPermission(allowed)
+    allowed = allowed == true
+    if localAllowed == allowed then return end
 
     localAllowed = allowed
-    LocalPlayer.state:set(STATE_KEY, allowed, true)
-
     if not allowed then
         clearPed(PlayerPedId())
     end
 end
 
-RegisterNetEvent('esx:playerLoaded', function(playerData)
-    setAllowed(playerData and playerData.job)
-end)
-
-RegisterNetEvent('esx:setJob', function(job)
-    setAllowed(job)
-end)
-
-RegisterNetEvent('esx:setPlayerData', function(key, value)
-    if key == 'job' then
-        setAllowed(value)
+AddStateBagChangeHandler(STATE_KEY, nil, function(bagName, _, value)
+    local serverId = GetPlayerServerId(PlayerId())
+    if serverId > 0 and bagName == ('player:%d'):format(serverId) then
+        updateLocalPermission(value)
     end
 end)
 
-RegisterNetEvent('esx:onPlayerLogout', function()
-    setAllowed(nil)
-end)
+local function requestPermission()
+    updateLocalPermission(LocalPlayer.state[STATE_KEY])
+    TriggerServerEvent('lion_weaponanims:requestSync')
+end
 
 AddEventHandler('playerSpawned', function()
     clearPed(PlayerPedId())
+    requestPermission()
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
-
-    LocalPlayer.state:set(STATE_KEY, false, true)
 
     for ped in pairs(applied) do
         clearPed(ped)
@@ -276,16 +259,7 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    while true do
-        local playerData = ESX.GetPlayerData()
-
-        if playerData and playerData.job then
-            setAllowed(playerData.job)
-            break
-        end
-
-        Wait(Config.JobCheckInterval)
-    end
+    requestPermission()
 end)
 
 CreateThread(function()
