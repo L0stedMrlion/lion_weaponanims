@@ -20,6 +20,7 @@ And there is a melee animation.
 ## ✨ Credits & Support
   - Original animations: [Ko's Tactical Weapon Reanimations](https://www.lcpdfr.com/downloads/gta5mods/character/54273-kos-tactical-weapon-reanimations/)
 All animation credits belong to the original animation creator.
+  - [CFX.re Post](https://forum.cfx.re/t/free-esx-lion-leo-weapon-animations/5434652)
 
 ## 🦁 Support
 
