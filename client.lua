@@ -1,4 +1,26 @@
 local STATE_KEY = 'lionWeaponAnim'
+local FRAMEWORK_STATE_KEY = 'lionWeaponAnimsFramework'
+
+
+local function getFramework()
+    local active = GlobalState[FRAMEWORK_STATE_KEY]
+    if type(active) == 'string' then return active end
+
+    local configured = type(Config.Framework) == 'string' and Config.Framework:lower() or 'auto'
+    if configured ~= 'auto' then return configured end
+
+    if GetResourceState('qbx_core') == 'started' then return 'qbox' end
+    if GetResourceState('es_extended') == 'started' then return 'esx' end
+    if GetResourceState('qb-core') == 'started' then return 'qbcore' end
+    return 'standalone'
+end
+
+local function isPlayerAllowed(serverId)
+    if getFramework() == 'standalone' then return true end
+    if not serverId or serverId <= 0 then return false end
+
+    return Player(serverId).state[STATE_KEY] == true
+end
 
 local CLIPSETS = {
     pistol = 'lion_weaponanim_pistol',
@@ -52,7 +74,7 @@ local WEAPON_GROUPS = {
 }
 
 local clipsetsReady = false
-local localAllowed = false
+local lastLocalPed = 0
 local applied = {}
 
 local function loadClipsets()
@@ -89,8 +111,7 @@ local function loadClipsets()
         end
     end
 
-    print(('^3[lion_weaponanims] ^7ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(
-        missing, ', ')))
+    print(('^3[lion_weaponanims] ^7ERROR: custom clipsets were registered but did not load: %s'):format(table.concat(missing, ', ')))
 end
 
 local function clearPed(ped)
@@ -213,31 +234,8 @@ local function applyPed(ped, allowed)
     end
 end
 
-local function updateLocalPermission(allowed)
-    allowed = allowed == true
-    if localAllowed == allowed then return end
-
-    localAllowed = allowed
-    if not allowed then
-        clearPed(PlayerPedId())
-    end
-end
-
-AddStateBagChangeHandler(STATE_KEY, nil, function(bagName, _, value)
-    local serverId = GetPlayerServerId(PlayerId())
-    if serverId > 0 and bagName == ('player:%d'):format(serverId) then
-        updateLocalPermission(value)
-    end
-end)
-
-local function requestPermission()
-    updateLocalPermission(LocalPlayer.state[STATE_KEY])
-    TriggerServerEvent('lion_weaponanims:requestSync')
-end
-
 AddEventHandler('playerSpawned', function()
     clearPed(PlayerPedId())
-    requestPermission()
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
@@ -259,14 +257,17 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    requestPermission()
-end)
-
-CreateThread(function()
     while true do
         if clipsetsReady then
-            applyPed(PlayerPedId(), localAllowed)
-            Wait(localAllowed and Config.PlayerUpdateInterval or 750)
+            local ped = PlayerPedId()
+            if ped ~= lastLocalPed then
+                clearPed(lastLocalPed)
+                lastLocalPed = ped
+            end
+
+            local allowed = isPlayerAllowed(GetPlayerServerId(PlayerId()))
+            applyPed(ped, allowed)
+            Wait(allowed and Config.PlayerUpdateInterval or 750)
         else
             Wait(Config.OtherPlayersUpdateInterval)
         end
@@ -288,7 +289,7 @@ CreateThread(function()
                 if player ~= myPlayer then
                     local serverId = GetPlayerServerId(player)
                     local ped = GetPlayerPed(player)
-                    local allowed = Player(serverId).state[STATE_KEY] == true
+                    local allowed = isPlayerAllowed(serverId)
 
                     if ped ~= 0 then
                         seen[ped] = true
